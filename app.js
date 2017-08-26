@@ -1,11 +1,11 @@
-const express = require ('express');
+// const session = require('express-session');
+const express = require('express');
 const mustache = require('mustache-express');
 const dal = require('./dal.js');
-const bodyParser= require('body-parser')
+const makeDashes = require('./dal.js').makeDashes
+const bodyParser = require('body-parser')
 const app = express();
-const displayArr= require('./displayArr.js');
-const guessArr= require('./guessArr.js');
-console.log('guessArr', guessArr);
+// let displayArr = require('./displayArr.js');
 
 
 
@@ -15,32 +15,38 @@ app.set('views', __dirname + '/views');
 
 app.use(express.static('public'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({
+  extended: false
+}));
 
-app.get('/', function(req, res){
-  dal.selectedWord();
-  res.render("./main", {
-    displayArr: displayArr,
-    guessArr:guessArr
-  });
+
+
+app.get('/', function(req, res) {
+  if (dal.getGuesses() === 0) {
+    res.render("./loser");
+  }  else if (dal.getGuesses() > 0) {
+    res.render("./main", {
+      makeDashes: dal.getWord(), //your displayed "_"
+      incorrectArr: dal.incorrectArr,
+      getGuesses: dal.getGuesses()
+    });
+  }
 })
 
-app.post('/', function(req,res){
-  // guessArr.push(req.body.id)
-  const renderObject = {
-    guessArr
-  }
+app.post('/', function(req, res) {
+  let winningWord = dal.getWord();
   dal.addGuess(req.body.id)
-  // console.log('dal.addGuess(req.body.id', dal.addGuess(req.body.id));
-  // dal.getGuess(req.body.id);
+  console.log("getWord", dal.getWord());
+  if (winningWord.join('') === dal.mysteryWord) {
+    res.render("./win");
+  } else {
   res.redirect('/')
-  // console.log("displayArr", displayArr);
-  // console.log("displayArr Length", displayArr.length);
+}
 })
 
 
 
 app.set('port', 3000);
-app.listen(3000, function(){
+app.listen(3000, function() {
   console.log('Application has started at 3000');
 })

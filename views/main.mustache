@@ -10,23 +10,23 @@
 <body>
   <header>
     <span>Mystery word</span>
-    <span>You have 8 guesses left</span>
+    {{>_guessesLeft}}
   </header>
   <main class="wrapper">
     <ul>
-      {{#displayArr}}
-    <li>{{display}}</li>
-      {{/displayArr}}
+      {{#makeDashes}}
+    <li>{{.}}</li>
+      {{/makeDashes}}
     </ul>
     <form class="guessed-letter" action="/" method="post">
-      <input type="text" name="id" value="" placeholder="Choose a Letter">
+      <input type="text" maxlength="1" pattern="[A-Za-z]" name="id" value="" autofocus placeholder="Choose a Letter">
       <button type="submit" name="submit">Submit</button>
     </form>
-    <p>Letters Guessed: </p>
+    <p>Incorrect Guesses: </p>
     <ul>
-      {{#guessArr}}
+      {{#incorrectArr}}
         <li> {{.}} </li>
-      {{/guessArr}}
+      {{/incorrectArr}}
     </ul>
   </main>
 </body>

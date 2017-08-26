@@ -1,57 +1,112 @@
 const fs = require('fs');
 const words = fs.readFileSync("/usr/share/dict/words", "utf-8").toLowerCase().split("\n");
-const displayArr= require('./displayArr.js');
-const guessArr= require('./guessArr.js');
 let mysteryWord = words[Math.floor(Math.random() * words.length)];
-let mysteryWordArr=[...mysteryWord];
+let incorrectArr = [];
 console.log("mysteryWord", mysteryWord);
-console.log("mysteryWordArr", mysteryWordArr);
-// console.log("displayArr", displayArr);
+
+let guesses = 8;
+let word = makeDashes();
 
 
-
-function addGuess(item){
-  guessArr.push(item);
-  console.log("addGuess", guessArr);
+function makeDashes(){
+  let displayArr = [];
+  for(let i = 0; i < mysteryWord.length; i++){
+    displayArr.push("_")
+  }
+  return displayArr;
 }
 
-// function getGuess(){
-//   return guessArr.filter(function(item){
-//     return item;
-//   })
+function getWord(){
+  return word;
+}
+function getGuesses(){
+  return guesses;
+}
+
+// function addGuess(item) {
+//   guessArr.push(item);
+//   console.log("addGuess", guessArr);
 // }
 
-// function guessCount(){
-//   return (displayArr.length +1)
-//   console.log('guess count', displayArr.length +1)
-// }
-
-function selectedWord(){
-  if (displayArr.length < mysteryWord.length){
-  // console.log(mysteryWordArr);
-  for(let i=0;i<mysteryWordArr.length; i++){
-    let oneLetter = mysteryWordArr[i]
-    let newLetter = {id: oneLetter, display: "_"}
-    // console.log(typeof("oneLetter", oneLetter));
-    // console.log("newLetter", newLetter);
-    displayArr.push(newLetter);
-    // console.log("displayArr", displayArr);
+function addGuess(guessedLetter){
+  let isCorrect = false;
+  for (var i = 0; i<mysteryWord.length; i++){
+    if(mysteryWord[i] === guessedLetter){
+      console.log("success!");
+      word[i] = guessedLetter;
+      isCorrect = true;
     }
   }
+  if(isCorrect === false){
+    incorrectArr.push(guessedLetter)
+    console.log("incorrectArr", incorrectArr);
+    guesses -= 1;
+    console.log("guesses", guesses);
+  }
 }
-// console.log("selectedWord", selectedWord());
 
-// function makeDashes(arr){
-//   for(let i=0;i<arr.length; i++){
-//
-//   }
-//   return dashedArr;
-// }
-// console.log("makeDashes", makeDashes(mysteryWord));
 
 module.exports = {
-  displayArr: displayArr,
-  selectedWord: selectedWord,
-  // getGuess: getGuess,
-  addGuess: addGuess
+  mysteryWord: mysteryWord,
+  getWord: getWord,
+  getGuesses: getGuesses,
+  incorrectArr: incorrectArr,
+  makeDashes: makeDashes,
+  addGuess: addGuess,
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+// word = 'Hello'
+// displayArr = ['_', '_', '_', "_", "_"]
+// let guesses = 8
+// let isCorrect = false
+// for (var i = 0; i < word.length; i++) {
+//   if(word[i] === guessedLetter) {
+//     displayArr[i] = guessedLetter
+//     isCorrect = true
+//   }
+// }
+// if(isCorrect === false){
+//   incorrectArr.push(guessedLetter)
+//   guesses -= 1
+// }
+// //have we already guessed the letter?
+// if((displayArr.indexOf(guessedLetter) !== -1) &&
+//    (incorrectArr.indexOf(guessedLetter) !== -1)) {
+//      //run all code
+//    }
+//   // if(displayArr.join('') === word)
+// if(guessArr.indexOf(guessedLetter) !== -1){
+//   //run all code
+// }
+// function checkForLetter() {
+//   for (let i = 0; i < displayArr.length; i++) {
+//     let mysteryLetter = displayArr[i].id;
+//     for (let j = 0; j < guessArr.length; j++) {
+//       let guessedLetter = guessArr[j];
+//       // console.log("guessedLetter", guessedLetter);
+//       if (guessedLetter === mysteryLetter) {
+//         displayArr[i].display = guessedLetter
+        // console.log("guessedLetter in if loop", guessedLetter);
+        // console.log("placeholder in if loop", placeholder);
+        // console.log("displayArr from loop", displayArr);
+//       }
+//     }
+//   }
+// }
+//
+// function incorrectGuesses(){
+//
+//
+// }
